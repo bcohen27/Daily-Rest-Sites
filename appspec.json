@@ -1,0 +1,111 @@
+{
+  "settings": [
+    {
+      "id": "window",
+      "name": "Day or night selection",
+      "description": "Select if you want to extract night roosts or day resting/feeding sites or (by default) resting sites during all 24h (back from midnight).",
+      "defaultValue": null,
+      "type": "RADIOBUTTONS",
+      "options": [
+        {
+          "value": null,
+          "displayText": "24h resting sites"
+        },
+		{
+          "value": "sundownup",
+          "displayText": "From sunset to sunrise (night). Timing can be adapted below."
+        },
+		{
+          "value": "sunupdown",
+          "displayText": "From sunrise to sunset (day). Timing can be adapted below."
+        }
+      ]
+    },
+	{
+      "id": "upX",
+      "name": "Sunrise adaption time",
+      "description": "Select how many minutes after (negative numbers if before) sunrise your animals start resting.",
+      "defaultValue": 0,
+      "type": "DOUBLE"
+    },
+	{
+      "id": "downX",
+      "name": "Sunset adaption time",
+      "description": "Select how many minutes after (negative numbers if before) sunset your animals start resting.",
+      "defaultValue": 0,
+      "type": "DOUBLE"
+    },
+	{
+      "id": "speedvar",
+      "name": "Speed variable name",
+      "description": "Name of variable in your data set that indicates speed measured at each location to use for filtering for ground locations. By default interlocation speed ('speed') will be used.",
+      "defaultValue": "speed",
+      "type": "STRING"
+    },
+	{
+      "id": "maxspeed",
+      "name": "Maximum roosting speed",
+      "description": "Insert maximum speed that your resting animal is allowed (in m/s), also by location inaccuracy.",
+      "defaultValue": null,
+      "type": "DOUBLE"
+    },
+    {
+      "id": "duration",
+      "name": "Minimum roost duration",
+      "description": "Inset minimum duration (in h) that your animal has to be in a refined area to be considred resting. If rest radius is given, default here to 1 hour.",
+      "defaultValue": null,
+      "type": "DOUBLE"
+    },
+    {
+      "id": "radius",
+      "name": "Maximum roost radius",
+      "description": "Inset maximum radius (in m) of an area that you animal has to be refined to for being considered resting. If rest duration is given, default here to 1000 = 1km.",
+      "defaultValue": null,
+      "type": "DOUBLE"
+    }
+  ],
+  "dependencies": {
+    "R": [
+      {
+        "name": "move"
+      },
+      {
+        "name": "foreach"
+      },
+      {
+        "name": "maptools"
+      },
+      {
+        "name": "lubridate"
+      }
+    ]
+  },
+  "createsArtifacts": true,
+  "license": {
+    "key": "MIT"
+  },
+  "language": "eng",
+  "keywords": [
+    "rest site",
+	"resting",
+    "sleep",
+	"forage"
+    "filter",
+    "movebank"
+  ],
+  "people": [
+    {
+      "firstName": "Andrea",
+      "middleInitials": null,
+      "lastName": "Kölzsch",
+      "email": "akoelzsch@ab.mpg.de",
+      "roles": ["author", "creator"],
+      "orcid": "0000-0003-0193-1563",
+      "affiliation": "Max-Planck-Institute of Animal Behavior",
+      "affiliationRor": "https://ror.org/026stee22"
+    }
+  ],
+  "documentation" : {
+    "url": "https://github.com/movestore/Daily-Rest-Sites/blob/master/README.md"
+  }
+}
