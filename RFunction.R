@@ -139,11 +139,14 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
           ynight <- yday
           
           ixx <- which(is.na(data.nighti$sundownx))
-          ynight[timestamps(data.nighti[-ixx])>data.nighti$sundownx[-ixx]] <- ynight[timestamps(data.nighti[-ixx])>data.nighti$sundownx[-ixx]]+1
-          
-          # for Arctic/Antarctic nights the night goes from midday to midday, which depends on the location..
-          midday_ixx <- solarnoon(coordinates(data.nighti[ixx]),timestamps(data.nighti[ixx]),POSIXct.out=TRUE)$time
-          ynight[timestamps(data.nighti[ixx])>midday_ixx] <- ynight[timestamps(data.nighti[ixx])>midday_ixx]+1
+          if (length(ixx)>0)
+          {
+            ynight[timestamps(data.nighti[-ixx])>data.nighti$sundownx[-ixx]] <- ynight[timestamps(data.nighti[-ixx])>data.nighti$sundownx[-ixx]]+1
+            
+            # for Arctic/Antarctic nights the night goes from midday to midday, which depends on the location..
+            midday_ixx <- solarnoon(coordinates(data.nighti[ixx]),timestamps(data.nighti[ixx]),POSIXct.out=TRUE)$time
+            ynight[timestamps(data.nighti[ixx])>midday_ixx] <- ynight[timestamps(data.nighti[ixx])>midday_ixx]+1
+          }
           
           # adapt for New Year's Eve
           year[as.POSIXlt(timestamps(data.nighti))$mday==31 & as.POSIXlt(timestamps(data.nighti))$mon==11 & timestamps(data.nighti)>data.nighti$sundownx] <- year[as.POSIXlt(timestamps(data.nighti))$mday==31 & as.POSIXlt(timestamps(data.nighti))$mon==11 & timestamps(data.nighti)>data.nighti$sundownx]+1
@@ -345,8 +348,8 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       } else 
       {
         result <- moveStack(data.rest.nozero)
-        write.csv(prop.rest.df,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_overview.csv"),row.names=FALSE) #csv artefakt
-        #write.csv(prop.rest.df,file = "rest_overview.csv",row.names=FALSE)
+        #write.csv(prop.rest.df,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_overview.csv"),row.names=FALSE) #csv artefakt
+        write.csv(prop.rest.df,file = "rest_overview.csv",row.names=FALSE)
         # note that all timestamps are UTC!
       }
     }
