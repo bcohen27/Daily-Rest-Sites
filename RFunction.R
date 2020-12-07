@@ -348,8 +348,8 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       } else 
       {
         result <- moveStack(data.rest.nozero)
-        #write.csv(prop.rest.df,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_overview.csv"),row.names=FALSE) #csv artefakt
-        write.csv(prop.rest.df,file = "rest_overview.csv",row.names=FALSE)
+        write.csv(prop.rest.df,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_overview.csv"),row.names=FALSE) #csv artefakt
+        #write.csv(prop.rest.df,file = "rest_overview.csv",row.names=FALSE)
         # note that all timestamps are UTC!
       }
     }
