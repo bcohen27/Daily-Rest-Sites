@@ -2,7 +2,7 @@ library(jsonlite)
 source("logger.R")
 source("RFunction.R")
 
-inputFileName = "input_CurlewHK_seasonalOutput.rds" #important to set to NULL for movebank-download
+inputFileName = "input_Curlew2DailyRests.rds" #important to set to NULL for movebank-download
 outputFileName = "output.rds"
 
 args <- list()
@@ -17,13 +17,13 @@ args <- list()
 #    args[["password"]] = "any-password"
 
 # Add your arguments of your r function here
-args[["window"]] = "sundownup" # NULL "sunupdown" #sunupdown
+args[["window"]] = NULL # NULL "sunupdown" #sunupdown
 args[["upX"]] = 0 #min
-args[["downX"]] = 30 #min 
+args[["downX"]] = 0 #min 
 args[["speedvar"]] = 	"ground_speed"
 args[["maxspeed"]] = 1 #m/s
-args[["duration"]] = 2 #h
-args[["radius"]] = 	1000 #m 
+args[["duration"]] = 0.25 #h
+args[["radius"]] = 	500 #m 
 
 
 #################################################################
