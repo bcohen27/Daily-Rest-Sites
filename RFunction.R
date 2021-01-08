@@ -43,7 +43,8 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
         res <- datai[sort(unique(c(ix,ix+1))),]#this uses the speed between positions
       } else if (speedvar %in% names(datai)) 
       {
-        res <- datai[datai@data[,speedvar]<maxspeed,] # this uses the GPS ground speed at positions
+        res <- datai[datai@data[,speedvar]<maxspeed | is.na(datai@data[,speedvar]),] # this allows also NA speed to be selected
+        logger.info("Your speed variable contains NA, these are kept in the data set of rest positions.")
       } else 
       {
         logger.info("You have not selected a viable speed variable. Therefore the fallback between location speed is calculated.")
@@ -146,7 +147,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
             # for Arctic/Antarctic nights the night goes from midday to midday, which depends on the location..
             midday_ixx <- solarnoon(coordinates(data.nighti[ixx]),timestamps(data.nighti[ixx]),POSIXct.out=TRUE)$time
             ynight[timestamps(data.nighti[ixx])>midday_ixx] <- ynight[timestamps(data.nighti[ixx])>midday_ixx]+1
-          }
+          } else ynight[timestamps(data.nighti)>data.nighti$sundownx] <- ynight[timestamps(data.nighti)>data.nighti$sundownx]+1
           
           # adapt for New Year's Eve
           year[as.POSIXlt(timestamps(data.nighti))$mday==31 & as.POSIXlt(timestamps(data.nighti))$mon==11 & timestamps(data.nighti)>data.nighti$sundownx] <- year[as.POSIXlt(timestamps(data.nighti))$mday==31 & as.POSIXlt(timestamps(data.nighti))$mon==11 & timestamps(data.nighti)>data.nighti$sundownx]+1
@@ -335,7 +336,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
         if (dim(data.resti.df)[1]>0) 
         {
           o <- order(data.resti.df$timestamp)
-          data.resti <- move(x=data.resti.df$location_long[o],y=data.resti.df$location_lat[o],time=data.resti.df$timestamp[o],data=data.resti.df[o,],sensor=data.resti.df$sensor[o],animal=data.resti.df$local_identifier[o]) 
+          data.resti <- move(x=data.resti.df$location_long[o],y=data.resti.df$location_lat[o],time=as.POSIXct(data.resti.df$timestamp[o]),data=data.resti.df[o,],sensor=data.resti.df$sensor[o],animal=data.resti.df$local_identifier[o]) 
         } else data.resti <- NULL
       }
       names(data.rest) <- names(data.night.split)
