@@ -208,9 +208,12 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       result <- NULL
     } else 
     {
-      write.csv(data.night.nozero,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"data_rest_selectedTime.csv"),row.names=FALSE) #csv artefakt of all ground and night (or day...) positions
-      
       data.night <- moveStack(data.night.nozero)
+      data.night.df <- as.data.frame(data.night)
+      data.night.df.nna <- data.night.df[,-which(apply(data.night.df,2,function (x) all(is.na(x))))] #remove columns with all NA
+      
+      write.csv(data.night.df.nna,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"data_rest_selectedTime.csv"),row.names=FALSE) #csv artefakt of all ground and night (or day...) positions
+      #write.csv(data.night.df.nna,file = "data_rest_selectedTime.csv",row.names=FALSE) #csv artefakt of all ground and night (or day...) positions
       
       # save all rest positions if is rest by given definition (radius, duration), goes backwards for last night/day rest
       data.night.split <- move::split(data.night)
