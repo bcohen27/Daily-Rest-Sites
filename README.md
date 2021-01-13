@@ -12,9 +12,9 @@ This App extracts all locations of animals in a defined resting site. It is has 
 
 Before the analysis starts, the input data set is tinned to a resolution of max. 5 minutes to speed up the run time. It is sensible to do this, because high resolution data does not add anything to resting site extraction, for which longer time ranges are required.
 
-Then, the actual analysis is done in three steps. First, all positions with speed above the provided maximum speed are remove. This is sensible, as resing behaviour must show little movement. Second, all night or day positions are selected. For this, the sunriset() function from the maptools() package is used. If there are any locations in Arctic/Antarctic regions in times where there is no sunrise and sunset, all locations are retained or deleted, depending on day/night selection. If it was selected to calculated resting sites of the whole 24h days data set, all location are retained. Third, all positions that define a resting site with minimum duration and minimum radius are selected. For each individual and night/day all resting site are extracted, starting from the back, namely sunrise for night roosts, sunset for day resting sites and midnight for 24h resting selection.
+Then, the actual analysis is done in three steps. First, all positions with speed above the provided maximum speed are remove. This is sensible, as resing behaviour must show little movement. Second, all night or day positions are selected. For this, the sunriset() function from the maptools() package is used. If there are any locations in Arctic/Antarctic regions in times where there is no sunrise and sunset, all locations are retained or deleted, depending on day/night selection. If it was selected to calculated resting sites of the whole 24h days data set, all location are retained. A csv artefact of this intermediate data set is returned. Third, all positions that define a resting site with minimum duration and minimum radius are selected (note that per resting site a minimum of two locations is required). For each individual and night/day all resting site are extracted, starting from the back, namely sunrise for night roosts, sunset for day resting sites and midnight for 24h resting selection.
 
-Properties of detected resting sites are provided in a table that is given out as pdf artefact. There the following properties are listes for each resting site: animal name, year, night number, timestamp of first resting location, timestamp of last resting location, resting site mean loation (longitute/latitude), number of locations in the resting site, duration the animal has stayed in the resting site, realised radius of the resting site. 
+Properties of detected resting sites are provided in a table that is given out as csv artefact. There the following properties are listes for each resting site: animal name, year, night number, timestamp of first resting location, timestamp of last resting location, resting site mean loation (longitute/latitude), number of locations in the resting site, duration the animal has stayed in the resting site, realised radius of the resting site. 
 
 ### Input data
 moveStack in Movebank format
@@ -23,6 +23,7 @@ moveStack in Movebank format
 moveStack in Movebank format
 
 ### Artefacts
+`data_rest_selectedTime.csv`: csv-file with Table of all positions that are of low speed (below given threshold) and during night (day) as selected (see Documentation above)
 `rest_overview.csv`: csv-file with Table of all rest site properites (see details in Documentatin above)
 
 ### Parameters 

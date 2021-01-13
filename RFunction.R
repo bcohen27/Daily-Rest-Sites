@@ -208,6 +208,8 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       result <- NULL
     } else 
     {
+      write.csv(data.night.nozero,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"data_rest_selectedTime.csv"),row.names=FALSE) #csv artefakt of all ground and night (or day...) positions
+      
       data.night <- moveStack(data.night.nozero)
       
       # save all rest positions if is rest by given definition (radius, duration), goes backwards for last night/day rest
