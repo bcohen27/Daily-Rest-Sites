@@ -24,6 +24,7 @@ moveStack in Movebank format
 
 ### Artefacts
 `data_rest_selectedTime.csv`: csv-file with Table of all positions that are of low speed (below given threshold) and during night (day) as selected (see Documentation above)
+
 `rest_overview.csv`: csv-file with Table of all rest site properites (see details in Documentatin above)
 
 ### Parameters 
