@@ -3,13 +3,13 @@
     {
       "id": "window",
       "name": "Day or night selection",
-      "description": "Select if you want to extract night roosts or day resting/feeding sites or (by default) resting sites during all 24h (back from midnight).",
+      "description": "Select if you want to extract night roosts or day resting/feeding sites or (by default) all rest sites during a 24h period (defined as midnight to 23:59).",
       "defaultValue": null,
       "type": "RADIOBUTTONS",
       "options": [
         {
           "value": null,
-          "displayText": "24h resting sites"
+          "displayText": "All rest sites in 24h period"
         },
 		{
           "value": "sundownup",
@@ -44,22 +44,22 @@
     },
 	{
       "id": "maxspeed",
-      "name": "Maximum roosting speed",
-      "description": "Insert maximum speed that your resting animal is allowed (in m/s), also by location inaccuracy.",
+      "name": "Maximum resting speed",
+      "description": "Insert maximum resting speed of your animal(s) (in m/s). All locations with GPS speed above this value will be removed.",
       "defaultValue": null,
       "type": "DOUBLE"
     },
     {
       "id": "duration",
-      "name": "Minimum roost duration",
-      "description": "Inset minimum duration (in h) that your animal has to be in a refined area to be considred resting. If rest radius is given, default here to 1 hour.",
+      "name": "Minimum resting duration",
+      "description": "Insert minimum duration (in hours) that your animal(s) must remain within a particular area to be considered resting. If resting radius is given (see below), use 1 hour here as default.",
       "defaultValue": null,
       "type": "DOUBLE"
     },
     {
       "id": "radius",
-      "name": "Maximum roost radius",
-      "description": "Inset maximum radius (in m) of an area that you animal has to be refined to for being considered resting. If rest duration is given, default here to 1000 = 1km.",
+      "name": "Maximum resting radius",
+      "description": "Insert maximum radius (in m) within which your animal(s) must remain to be considered resting. Locations can be affected by location inaccuracy (e.g. GPS error) or by movements of the animal itself. If a resting duration is given (see above), a default of 1,000 m (1 km) is used here.",
       "defaultValue": null,
       "type": "DOUBLE"
     }
