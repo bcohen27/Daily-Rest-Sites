@@ -2,10 +2,17 @@ library('move')
 library('foreach')
 library('maptools')
 library('lubridate')
+library('geosphere')
 
 rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxspeed=NULL, duration=NULL, radius=NULL)
 {
   Sys.setenv(tz="UTC")
+  
+  speedx <- function(x) #input move object
+  {
+    N <- length(x)
+    distVincentyEllipsoid(coordinates(x))/as.numeric(difftime(timestamps(x)[-1],timestamps(x)[-N],units="secs"))
+  }
   
   n.all <- length(timestamps(data))
   data <- data[!duplicated(paste0(round_date(timestamps(data), "5 mins"), trackId(data))),]
@@ -39,7 +46,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
     data.ground <- foreach(datai = data.split) %do% {
       if (speedvar=="speed") 
       {
-        ix <- which(speed(datai)<maxspeed)
+        ix <- which(speedx(datai)<maxspeed)
         res <- datai[sort(unique(c(ix,ix+1))),]#this uses the speed between positions
       } else if (speedvar %in% names(datai)) 
       {
@@ -48,7 +55,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       } else 
       {
         logger.info("You have not selected a viable speed variable. Therefore the fallback between location speed is calculated.")
-        ix <- which(speed(datai)<maxspeed)
+        ix <- which(speedx(datai)<maxspeed)
         res <- datai[sort(unique(c(ix,ix+1))),]#this uses the speed between positions
       }
         res
