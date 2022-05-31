@@ -206,10 +206,11 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       }
       return(data.nighti)
     }
+    if (is(data.night,'Move')) data.night <- moveStack(data.night,forceTz="UTC") #force to movestack
     names (data.night) <- names(data.ground.split)
     data.night.nozero <- data.night[unlist(lapply(data.night, length) > 0)]
     
-    if (length(data.night.nozero)==0) 
+    if (length(data.night.nozero)==0) #number of list elements
     {
       logger.info("Your data contain no night/day positions. No csv overview saved. Return NULL.")
       result <- NULL
@@ -217,7 +218,8 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
     {
       data.night <- moveStack(data.night.nozero)
       data.night.df <- as.data.frame(data.night)
-      data.night.df.nna <- data.night.df[,-which(apply(data.night.df,2,function (x) all(is.na(x))))] #remove columns with all NA
+      nacolx <- which(apply(data.night.df,2,function (x) all(is.na(x))))
+      if (length(nacolx)>0) data.night.df.nna <- data.night.df[,-nacolx] else data.night.df.nna <- data.night.df #remove columns with all NA
       
       write.csv(data.night.df.nna,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"data_rest_selectedTime.csv"),row.names=FALSE) #csv artefakt of all ground and night (or day...) positions
       #write.csv(data.night.df.nna,file = "data_rest_selectedTime.csv",row.names=FALSE) #csv artefakt of all ground and night (or day...) positions
@@ -235,8 +237,10 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       }
       
       data.rest <- foreach(data.nighti = data.night.split) %do% {
-        print(namesIndiv(data.nighti))
-        data.resti.df <- as.data.frame(data.nighti)[0,]
+        logger.info(paste("Extracting rest sites of",namesIndiv(data.nighti)))
+        data.resti.df <- data.frame(as.data.frame(data.nighti),coordinates(data.nighti))[0,]
+        Nresti <- dim(data.resti.df)[2]
+        names(data.resti.df)[(Nresti-1):Nresti] <- c("location.long","location.lat")
         
         year <- unique(data.nighti@data$year)
         for (k in seq(along=year))
@@ -312,7 +316,9 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
                     data.remx <- data.rem
                   }
                   
-                  data.selx.df <- as.data.frame(data.selx)
+                  data.selx.df <- data.frame(as.data.frame(data.selx),coordinates(data.selx))
+                  Nselx <- dim(data.selx.df)[2]
+                  names(data.selx.df)[(Nselx-1):Nselx] <- c("location.long","location.lat")
                   
                   time0 <- min(timestamps(data.selx))
                   timeE <- max(timestamps(data.selx))
@@ -348,7 +354,8 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
         if (dim(data.resti.df)[1]>0) 
         {
           o <- order(data.resti.df$timestamp)
-          data.resti <- move(x=data.resti.df$location_long[o],y=data.resti.df$location_lat[o],time=as.POSIXct(data.resti.df$timestamp[o]),data=data.resti.df[o,],sensor=data.resti.df$sensor[o],animal=data.resti.df$local_identifier[o]) 
+          if ("trackId" %in% names(data.resti.df)) data.resti <- move(x=data.resti.df$location.long[o],y=data.resti.df$location.lat[o],time=as.POSIXct(data.resti.df$timestamp[o]),data=data.resti.df[o,],sensor=data.resti.df$sensor[o],animal=data.resti.df$trackId[o])
+          if ("individual.local.identifier" %in% names(data.resti.df)) data.resti <- move(x=data.resti.df$location.long[o],y=data.resti.df$location.lat[o],time=as.POSIXct(data.resti.df$timestamp[o]),data=data.resti.df[o,],sensor=data.resti.df$sensor[o],animal=data.resti.df$individual.local.identifier[o])
         } else data.resti <- NULL
       }
       names(data.rest) <- names(data.night.split)
