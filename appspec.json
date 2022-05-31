@@ -45,22 +45,22 @@
 	{
       "id": "maxspeed",
       "name": "Maximum resting speed",
-      "description": "Insert maximum resting speed of your animal(s) (in m/s). All locations with GPS speed above this value will be removed.",
-      "defaultValue": null,
+      "description": "Insert maximum resting speed of your animal(s) (in m/s). All locations with GPS speed above this value will be removed. Defaults to 1 m/s",
+      "defaultValue": 1,
       "type": "DOUBLE"
     },
     {
       "id": "duration",
       "name": "Minimum resting duration",
       "description": "Insert minimum duration (in hours) that your animal(s) must remain within a particular area to be considered resting. If resting radius is given (see below), use 1 hour here as default.",
-      "defaultValue": null,
+      "defaultValue": 1,
       "type": "DOUBLE"
     },
     {
       "id": "radius",
       "name": "Maximum resting radius",
       "description": "Insert maximum radius (in m) within which your animal(s) must remain to be considered resting. Locations can be affected by location inaccuracy (e.g. GPS error) or by movements of the animal itself. If a resting duration is given (see above), a default of 1,000 m (1 km) is used here.",
-      "defaultValue": null,
+      "defaultValue": 1000,
       "type": "DOUBLE"
     }
   ],
