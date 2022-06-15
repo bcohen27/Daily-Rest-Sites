@@ -4,9 +4,11 @@ library('maptools')
 library('lubridate')
 library('geosphere')
 
-rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxspeed=NULL, duration=NULL, radius=NULL)
+rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxspeed=NULL, duration=NULL, radius=NULL)
 {
   Sys.setenv(tz="UTC")
+  
+  names(data) <- make.names(names(data),allow_=FALSE)
   
   speedx <- function(x) #input move object
   {
@@ -20,7 +22,8 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
 
   if (is.null(window)) 
   {
-    logger.info("You have not selected if to extract positions during night or day. All resting sites of the 24h day will be extracted (starting midnight)")
+    logger.info("You have not selected if to extract positions during night, day or 24 hours. All resting sites of the 24h day will be extracted (starting midnight)")
+    window <- "all"
   } else
   {
     if (window=="sundownup") 
@@ -29,10 +32,14 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
     } else if (window=="sunupdown") 
     {
       logger.info(paste("Your have selected to extract positions from sunrise +",upX,"minutes until sunset +",downX,"minutes. The algorithm starts from the sunset side back."))
-    } else
+    } else if (window=="all") 
+    {
+      logger.info(paste("Your have selected to extract positions from all the 24h of the day. The algorithm starts midnight."))
+    }
+    else
     {
       logger.info("Your selected day/night selection option is not valid. Here we use NULL instead, thus all resting sites of the 24h day will be extracted (starting midnight).")
-      window <- NULL
+      window <- "all"
     }
   }
   
@@ -44,20 +51,34 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
   {
     data.split <- move::split(data)
     data.ground <- foreach(datai = data.split) %do% {
-      if (speedvar=="speed") 
-      {
-        ix <- which(speedx(datai)<maxspeed)
-        res <- datai[sort(unique(c(ix,ix+1))),]#this uses the speed between positions
-      } else if (speedvar %in% names(datai)) 
-      {
-        res <- datai[datai@data[,speedvar]<maxspeed | is.na(datai@data[,speedvar]),] # this allows also NA speed to be selected
-        logger.info("Your speed variable contains NA, these are kept in the data set of rest positions.")
-      } else 
-      {
-        logger.info("You have not selected a viable speed variable. Therefore the fallback between location speed is calculated.")
-        ix <- which(speedx(datai)<maxspeed)
-        res <- datai[sort(unique(c(ix,ix+1))),]#this uses the speed between positions
-      }
+        if (speedvar=="speed") 
+        {
+          if (length(datai)>1) #cannot calculated between-loc speed if only one location, therefore keep
+          {
+            ix <- which(speedx(datai)<maxspeed)
+            res <- datai[sort(unique(c(ix,ix+1))),]#this uses the speed between positions
+          } else
+          {
+            logger.info("One of your tracks contains only one location, so between-location speed cannot be calculated. The location is kept in the data set, but might corrupt the results.")
+            res <- datai
+          }
+        } else if (speedvar %in% names(datai)) 
+        {
+          res <- datai[datai@data[,speedvar]<maxspeed | is.na(datai@data[,speedvar]),] # this allows also NA speed to be selected
+          logger.info("Your speed variable contains NA, these are kept in the data set of rest positions.")
+        } else 
+        {
+          logger.info("You have not selected a viable speed variable. Therefore the fallback between location speed is calculated.")
+          if (length(datai)>1)
+          {
+            ix <- which(speedx(datai)<maxspeed)
+            res <- datai[sort(unique(c(ix,ix+1))),]#this uses the speed between positions
+          } else
+          {
+            logger.info("One of your tracks contains only one location, so between-location speed cannot be calculated. The location is kept in the data set, but might corrupt the results.")
+            res <- datai
+          }
+        }
         res
     }
     names(data.ground) <- names(data.split)
@@ -98,7 +119,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       ix_AntSum <- ix[coordinates(data.groundi)[ix,2]<(-50) & as.POSIXlt(timestamps(data.groundi[ix,]))$mon %in% c(10:11,0:2)]
       
       
-      if (is.null(window))
+      if (window=="all")
       {
         data.nighti <- data.groundi
         year <- as.POSIXlt(timestamps(data.nighti))$year+1900
@@ -227,7 +248,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       # save all rest positions if is rest by given definition (radius, duration), goes backwards for last night/day rest
       data.night.split <- move::split(data.night)
       
-      if (is.null(window))
+      if (window=="all")
       {
         prop.rest.df <- data.frame("local.identifier"=character(),"year"=numeric(),"yday"=numeric(),"timestamp.first"=character(),"timestamp.last"=character(),"rest.mean.long"=numeric(),"rest.mean.lat"=numeric(),"rest.nposi"=numeric(),"rest.duration"=numeric(),"rest.radius"=numeric())
       } else
@@ -238,7 +259,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
       
       data.rest <- foreach(data.nighti = data.night.split) %do% {
         logger.info(paste("Extracting rest sites of",namesIndiv(data.nighti)))
-        data.resti.df <- data.frame(as.data.frame(data.nighti),coordinates(data.nighti))[0,]
+        data.resti.df <- data.frame(as.data.frame(moveStack(data.nighti)),coordinates(data.nighti))[0,] #empty df to fill, moveStack to keep trackId
         Nresti <- dim(data.resti.df)[2]
         names(data.resti.df)[(Nresti-1):Nresti] <- c("location.long","location.lat")
         
@@ -248,7 +269,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
           
           data.nightik <- data.nighti[data.nighti@data$year==year[k],]
           
-          if (is.null(window))
+          if (window=="all")
           {
             night <- unique(data.nightik@data$yday)
           } else
@@ -260,7 +281,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
           for (j in seq(along=night))
           {
             
-            if (is.null(window))
+            if (window=="all")
             {
               data.nightikj <- data.nightik[data.nightik@data$yday==night[j],]
             } else
@@ -316,7 +337,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
                     data.remx <- data.rem
                   }
                   
-                  data.selx.df <- data.frame(as.data.frame(data.selx),coordinates(data.selx))
+                  data.selx.df <- data.frame(as.data.frame(moveStack(data.selx)),coordinates(data.selx))
                   Nselx <- dim(data.selx.df)[2]
                   names(data.selx.df)[(Nselx-1):Nselx] <- c("location.long","location.lat")
                   
@@ -329,7 +350,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
                   {
                     data.resti.df <- rbind(data.resti.df,data.selx.df)
                     
-                    if (is.null(window))
+                    if (window=="all")
                     {
                       prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=namesIndiv(data.selx),"year"=data.selx.df$year[1],"yday"=data.selx.df$yday[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=length(data.selx),"rest.duration"=durx,"rest.radius"=radx))
                     } else
@@ -354,8 +375,7 @@ rFunction <- function(data, window=NULL, upX=0, downX=0, speedvar="speed", maxsp
         if (dim(data.resti.df)[1]>0) 
         {
           o <- order(data.resti.df$timestamp)
-          if ("trackId" %in% names(data.resti.df)) data.resti <- move(x=data.resti.df$location.long[o],y=data.resti.df$location.lat[o],time=as.POSIXct(data.resti.df$timestamp[o]),data=data.resti.df[o,],sensor=data.resti.df$sensor[o],animal=data.resti.df$trackId[o])
-          if ("individual.local.identifier" %in% names(data.resti.df)) data.resti <- move(x=data.resti.df$location.long[o],y=data.resti.df$location.lat[o],time=as.POSIXct(data.resti.df$timestamp[o]),data=data.resti.df[o,],sensor=data.resti.df$sensor[o],animal=data.resti.df$individual.local.identifier[o])
+          data.resti <- move(x=data.resti.df$location.long[o],y=data.resti.df$location.lat[o],time=as.POSIXct(data.resti.df$timestamp[o]),data=data.resti.df[o,],sensor=data.resti.df$sensor[o],animal=data.resti.df$trackId[o])
         } else data.resti <- NULL
       }
       names(data.rest) <- names(data.night.split)

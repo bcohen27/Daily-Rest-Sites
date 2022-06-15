@@ -4,11 +4,11 @@
       "id": "window",
       "name": "Day or night selection",
       "description": "Select if you want to extract night roosts or day resting/feeding sites or (by default) all rest sites during a 24h period (defined as midnight to 23:59).",
-      "defaultValue": null,
+      "defaultValue": "all",
       "type": "RADIOBUTTONS",
       "options": [
         {
-          "value": null,
+          "value": "all",
           "displayText": "All rest sites in 24h period"
         },
 		{

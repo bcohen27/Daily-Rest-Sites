@@ -2,7 +2,7 @@ library(jsonlite)
 source("logger.R")
 source("RFunction.R")
 
-inputFileName = "input_BeanGeese_13jan2021.rds" #important to set to NULL for movebank-download
+inputFileName = "App-Output Workflow_Instance_001__Speed_Between_Locations__2022-06-14_13-11-52.rds" #important to set to NULL for movebank-download
 outputFileName = "output.rds"
 
 args <- list()
@@ -17,13 +17,13 @@ args <- list()
 #    args[["password"]] = "any-password"
 
 # Add your arguments of your r function here
-args[["window"]] = "sunupdown" # NULL "sundownup" "sunupdown"
-args[["upX"]] = 60 #min
-args[["downX"]] = -60 #min 
+args[["window"]] = "all" # NULL "sundownup" "sunupdown"
+args[["upX"]] = 0 #min
+args[["downX"]] = 0 #min 
 args[["speedvar"]] = 	"speed"
 args[["maxspeed"]] = 1 #m/s
-args[["duration"]] = 1 #h
-args[["radius"]] = 	500 #m 
+args[["duration"]] = 1 #h; feed: 2h, roost 4h
+args[["radius"]] = 	100000 #m feed and roost: 1000m 
 
 
 #################################################################
