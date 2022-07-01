@@ -14,7 +14,9 @@ Before the analysis starts, the input data set is tinned to a resolution of max.
 
 Then, the actual analysis is done in three steps. First, all positions with speed above the provided maximum speed are remove. This is sensible, as resing behaviour must show little movement. Second, all night or day positions are selected. For this, the sunriset() function from the maptools() package is used. If there are any locations in Arctic/Antarctic regions in times where there is no sunrise and sunset, all locations are retained or deleted, depending on day/night selection. If it was selected to calculated resting sites of the whole 24h days data set, all location are retained. A csv artefact of this intermediate data set is returned. Third, all positions that define a resting site with minimum duration and minimum radius are selected (note that per resting site a minimum of two locations is required). For each individual and night/day all resting site are extracted, starting from the back, namely sunrise for night roosts, sunset for day resting sites and midnight for 24h resting selection.
 
-Properties of detected resting sites are provided in a table that is given out as csv artefact. There the following properties are listes for each resting site: animal name, year, night number, timestamp of first resting location, timestamp of last resting location, resting site mean loation (longitute/latitude), number of locations in the resting site, duration the animal has stayed in the resting site, realised radius of the resting site. 
+Properties of detected resting sites are provided in a table that is given out as csv artefact. There the following properties are listes for each resting site: animal name, year, night number, timestamp of first resting location, timestamp of last resting location, resting site mean loation (longitute/latitude), number of locations in the resting site, duration the animal has stayed in the resting site, realised radius of the resting site.
+
+For rough evaluation, the App is also producing a pdf map showing the locations of all resting sites on top of the tracks.
 
 ### Input data
 moveStack in Movebank format
@@ -26,6 +28,8 @@ moveStack in Movebank format
 `data_rest_selectedTime.csv`: csv-file with Table of all positions that are of low speed (below given threshold) and during night (day) as selected (see Documentation above)
 
 `rest_overview.csv`: csv-file with Table of all rest site properites (see details in Documentatin above)
+
+`rest_sites_onTracks.pdf`: pdf-file of Map showing all tracks (blue) with the locations of the extracted resting sites on top (red). The dots have uniform size, i.e. do not indicate the size of the resting site. That way more sites are visible.
 
 ### Parameters 
 `window`: Radiobuttons selection to indicate if only night locations ('sundownup'), day locations ('sunupdown') or all locations of a 24h day shall be selected.

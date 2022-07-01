@@ -3,6 +3,7 @@ library('foreach')
 library('maptools')
 library('lubridate')
 library('geosphere')
+library('ggmap')
 
 rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxspeed=NULL, duration=NULL, radius=NULL)
 {
@@ -383,13 +384,21 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
       
       if (length(data.rest.nozero)==0) 
       {
-        logger.info("Your output file contains no positions. No csv overview saved. Return NULL.")
+        logger.info("Your output file contains no positions. No csv overview and plot saved. Return NULL.")
         result <- NULL
       } else 
       {
         result <- moveStack(data.rest.nozero)
         write.csv(prop.rest.df,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_overview.csv"),row.names=FALSE) #csv artefakt
         #write.csv(prop.rest.df,file = "rest_overview.csv",row.names=FALSE)
+        
+        map <- get_map(bbox(extent(data)),source="osm",force=TRUE)
+        
+        out <- ggmap(map) +
+          geom_path(data=as.data.frame(data),aes(x=location_long,y=location_lat,group=local_identifier),colour="blue") +
+          geom_point(data=prop.rest.df,aes(x=rest.mean.long,y=rest.mean.lat),colour="red",size=3)
+        ggsave(out, file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_sites_onTracks.pdf"))
+        
         # note that all timestamps are UTC!
       }
     }
