@@ -395,10 +395,10 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
         map <- get_map(bbox(extent(data)),source="osm",force=TRUE)
         
         data.df <- data.frame(coordinates(data),as.data.frame(moveStack(data)))
-        names(data.df)[1:2] <- c("location.long","location.lat")
+        names(data.df)[1:2] <- c("location.long0","location.lat0")
         
         out <- ggmap(map) +
-          geom_path(data=data.df,aes(x=location.long,y=location.lat,group=trackId),colour="blue") +
+          geom_path(data=data.df,aes(x=location.long0,y=location.lat0,group=trackId),colour="blue") +
           geom_point(data=prop.rest.df,aes(x=rest.mean.long,y=rest.mean.lat),colour="red",size=3)
         ggsave(out, file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_sites_onTracks.pdf"))
         
