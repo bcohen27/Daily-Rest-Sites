@@ -11,6 +11,12 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
   
   names(data) <- make.names(names(data),allow_=FALSE)
   
+  # add species info
+  data.df <- as.data.frame(data)
+  names(data.df) <- make.names(names(data.df),allow_=FALSE)
+  if (any(names(data.df)=="individual.taxon.canonical.name")) data@data$species <- data.df$individual.taxon.canonical.name
+  if (any(names(data.df)=="taxon.canonical.name")) data@data$species <- data.df$taxon.canonical.name
+  
   speedx <- function(x) #input move object
   {
     N <- length(x)
@@ -353,11 +359,11 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
                     
                     if (window=="all")
                     {
-                      prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=namesIndiv(data.selx),"species"=data.selx.df$individual.taxon.canonical.name,"year"=data.selx.df$year[1],"yday"=data.selx.df$yday[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=length(data.selx),"rest.duration"=durx,"rest.radius"=radx))
+                      prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=namesIndiv(data.selx),"species"=data.selx.df$species,"year"=data.selx.df$year[1],"yday"=data.selx.df$yday[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=length(data.selx),"rest.duration"=durx,"rest.radius"=radx))
                     } else
                     {
-                      if (window=="sundownup") prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=namesIndiv(data.selx),"species"=data.selx.df$individual.taxon.canonical.name[1],"year"=data.selx.df$year[1],"ynight"=data.selx.df$ynight[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=length(data.selx),"rest.duration"=durx,"rest.radius"=radx))
-                      if (window=="sunupdown") prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=namesIndiv(data.selx),"species"=data.selx.df$individual.taxon.canonical.name,"year"=data.selx.df$year[1],"yday"=data.selx.df$yday[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=length(data.selx),"rest.duration"=durx,"rest.radius"=radx))
+                      if (window=="sundownup") prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=namesIndiv(data.selx),"species"=data.selx.df$species[1],"year"=data.selx.df$year[1],"ynight"=data.selx.df$ynight[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=length(data.selx),"rest.duration"=durx,"rest.radius"=radx))
+                      if (window=="sunupdown") prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=namesIndiv(data.selx),"species"=data.selx.df$species[1],"year"=data.selx.df$year[1],"yday"=data.selx.df$yday[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=length(data.selx),"rest.duration"=durx,"rest.radius"=radx))
                     }
                   }
                   
