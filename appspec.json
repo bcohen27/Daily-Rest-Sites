@@ -38,14 +38,14 @@
 	{
       "id": "speedvar",
       "name": "Speed variable name",
-      "description": "Name of variable in your data set that indicates speed measured at each location to use for filtering for ground locations. By default interlocation speed ('speed') will be used.",
+      "description": "Name of variable in your data set that indicates speed measured at each location to use for filtering for ground locations. Use GPS ground speed for best results. By default, movement speed as interpolated from subsequent locations in the data ('move::speed()') will be used.",
       "defaultValue": "speed",
       "type": "STRING"
     },
 	{
       "id": "maxspeed",
       "name": "Maximum resting speed",
-      "description": "Insert maximum resting speed of your animal(s) (in m/s). All locations with GPS speed above this value will be removed. Defaults to 1 m/s",
+      "description": "Insert maximum resting speed of your animal(s) (in m/s), i.e. at which speed do you still consider it 'resting'. All locations with speed above this value will be removed. Defaults to 1 m/s",
       "defaultValue": 1,
       "type": "DOUBLE"
     },
