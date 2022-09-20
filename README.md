@@ -5,7 +5,7 @@ MoveApps
 Github repository: *github.com/movestore/Daily-Rest-Sites*
 
 ## Description
-This App filters the data set to night or day positions (or of all 24h per day positions) with resting behaviour (in a certain radius for a certain min time with low speed). The resting positions are given as output and a csv table with properties of all resting sites of each individual is saved as artefact. This can be used for roost detection or foraging site extraction.
+This App filters the data set to night or day positions (or of all 24h per day positions) with resting behaviour (in a certain radius for a certain min time with low speed). The resting positions are given as output and a csv table with properties of all resting sites of each individual is saved as artefact. This can be used for roost detection or foraging site extraction. Data with resolutions between 1/min and 1/hour give the best results.
 
 ## Documentation
 This App extracts all locations of animals in a defined resting site. It is has been developed to generalise nightly roost site extraction of waterfowl. Here daily resting/foraging sites can be extracted, nightly roosts or general resting sites during the 24h of the day.
