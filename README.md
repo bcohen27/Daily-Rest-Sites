@@ -1,4 +1,4 @@
-# Daily Rest Sites
+# Daily Rest/Foraging Sites
 
 MoveApps
 
@@ -31,34 +31,34 @@ moveStack in Movebank format
 
 `rest_sites_onTracks.pdf`: pdf-file of Map showing all tracks (blue) with the locations of the extracted resting sites on top (red). The dots have uniform size, i.e. do not indicate the size of the resting site. That way more sites are visible.
 
-### Parameters 
-`window`: Radiobuttons selection to indicate if only night locations ('sundownup'), day locations ('sunupdown') or all locations of a 24h day shall be selected.
+### Settings
+**Day or night selection (`window`):** Radiobuttons selection to indicate if only night locations ('sundownup'), day locations ('sunupdown') or all locations of a 24h day shall be selected.
 
-`upX`: Sunrise adaption time that indicated how many minutes after (or if negative value before) sunrise your animals usually start the required resting behaviour.
+**Sunrise adaption time (`upX`):** Sunrise adaption time that indicated how many minutes after (or if negative value before) sunrise your animals usually start the required resting behaviour.
 
-`downX`: Sunset adaption time that indicated how many minutes after (or if negative value before) sunset your animals usually start the required resting behaviour.
+**Sunset adaption time (`downX`):** Sunset adaption time that indicated how many minutes after (or if negative value before) sunset your animals usually start the required resting behaviour.
 
-`speedvar`: Name of the variable in your data set that indicates speed measured at each location to use for filtering for ground locations. By default interlocation speed ('speed') will be used.
+**Speed variable name (`speedvar`):** Name of the variable in your data set that indicates speed measured at each location to use for filtering for ground locations. By default interlocation speed ('speed') will be used.
 
-`maxspeed`: Maximum speed (of the selected variable) an animal is allowed during resting behaviour. Locations with speeds above this value will be removed.
+**Maximum resting speed (`maxspeed`):** Maximum speed (of the selected variable) an animal is allowed during resting behaviour. Locations with speeds above this value will be removed.
 
-`duration`: Defined duration the animal minimally stays in a given radius for it to be considered resting. Unit: `hours`.
+**Minimum resting duration (`duration`):** Defined duration the animal minimally stays in a given radius for it to be considered resting. Unit: `hours`.
 
-`radius`: Defined radius the animal has to stay in for a given duration of time for it to be considered resting site. Unit: `metres`.
+**Maximum resting radius (`radius`):** Defined radius the animal has to stay in for a given duration of time for it to be considered resting site. Unit: `metres`.
 
 ### Null or error handling:
-**Parameter `window`:** The default value (NULL) inicates that all values of a 24h day will be retained and resting sites thereof extracted (starting from midnight).
+**Setting `window`:** The default value (NULL) inicates that all values of a 24h day will be retained and resting sites thereof extracted (starting from midnight).
 
-**Parameter `upX`:** The default value here is '0', indicating that no adaption time is necessary. If the value gets too large, the calculations might become difficult to understand.
+**Setting `upX`:** The default value here is '0', indicating that no adaption time is necessary. If the value gets too large, the calculations might become difficult to understand.
 
-**Parameter `downX`:** The default value here is '0', indicating that no adaption time is necessary. If the value gets too large, the calculations might become difficult to understand.
+**Setting `downX`:** The default value here is '0', indicating that no adaption time is necessary. If the value gets too large, the calculations might become difficult to understand.
 
-**Parameter `speedvar`:** The default here is 'speed', which is the interlocation speed calculated with the function speed() in the move package. If a non-existant variable name is entered here the algorithm will fall back on interlocation 'speed'.
+**Setting `speedvar`:** The default here is 'speed', which is the interlocation speed calculated with the function speed() in the move package. If a non-existant variable name is entered here the algorithm will fall back on interlocation 'speed'.
 
-**Parameter `maxspeed`:** If no maximum ground speed is provided (NULL), all locations are used for the night and roost analysis. This techniqually allows fast movement to be classified as roosting behaviour.
+**Setting `maxspeed`:** If no maximum ground speed is provided (NULL), all locations are used for the night and roost analysis. This techniqually allows fast movement to be classified as roosting behaviour.
 
-**Parameter `duration`:** If no duration AND no radius are given, the input data set is returned with a warning. If no duraiton is given (NULL), but a radius is defined then a default duration of 1 hour is set. 
+**Setting `duration`:** If no duration AND no radius are given, the input data set is returned with a warning. If no duraiton is given (NULL), but a radius is defined then a default duration of 1 hour is set. 
 
-**Parameter `radius`:** If no radius AND no duration are given, the input data set is returned with a warning. If no radius is given (NULL), but a duration is defined then a default radius of 1000m = 1km is set. 
+**Setting `radius`:** If no radius AND no duration are given, the input data set is returned with a warning. If no radius is given (NULL), but a duration is defined then a default radius of 1000m = 1km is set. 
 
 **Data:** If there are no resting locations retained after all analyses, NULL is returned, likely leading to an error.
