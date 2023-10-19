@@ -5,7 +5,7 @@ library('lubridate')
 library('geosphere')
 library('ggmap')
 
-rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxspeed=NULL, duration=NULL, radius=NULL)
+rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxspeed=NULL, duration=NULL, radius=NULL, stamen_key=NULL)
 {
   Sys.setenv(tz="UTC")
   
@@ -398,15 +398,23 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
         write.csv(prop.rest.df,file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_overview.csv"),row.names=FALSE) #csv artefakt
         #write.csv(prop.rest.df,file = "rest_overview.csv",row.names=FALSE)
         
-        map <- get_map(bbox(extent(data)),source="osm",force=TRUE)
+        if (is.null(stamen_key)) logger.info("You have not entered a stadia API key. Until MoveApps provides its OSM mirror, this is required. Register with stamen until then, it is free. Go to: https://stadiamaps.com/stamen/onboarding/create-account") else
+        {
+          register_stadiamaps(stamen_key)
+          
+          logger.info("Your stadia API key is registered.")
+          map <- get_stadiamap(bbox(extent(data)),source="stamen_terrain",force=TRUE)
+          
+          data.df <- data.frame(coordinates(data),as.data.frame(moveStack(data)))
+          names(data.df)[1:2] <- c("location.long0","location.lat0")
+          
+          out <- ggmap(map) +
+            geom_path(data=data.df,aes(x=location.long0,y=location.lat0,group=trackId),colour="blue") +
+            geom_point(data=prop.rest.df,aes(x=rest.mean.long,y=rest.mean.lat),colour="red",size=3)
+          ggsave(out, file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_sites_onTracks.pdf")) 
+        }
         
-        data.df <- data.frame(coordinates(data),as.data.frame(moveStack(data)))
-        names(data.df)[1:2] <- c("location.long0","location.lat0")
         
-        out <- ggmap(map) +
-          geom_path(data=data.df,aes(x=location.long0,y=location.lat0,group=trackId),colour="blue") +
-          geom_point(data=prop.rest.df,aes(x=rest.mean.long,y=rest.mean.lat),colour="red",size=3)
-        ggsave(out, file = paste0(Sys.getenv(x = "APP_ARTIFACTS_DIR", "/tmp/"),"rest_sites_onTracks.pdf"))
         
         # note that all timestamps are UTC!
       }
