@@ -403,7 +403,8 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
           register_stadiamaps(stamen_key)
           
           logger.info("Your stadia API key is registered.")
-          map <- get_stadiamap(bbox(extent(data)),source="stamen_terrain",force=TRUE)
+          #map <- get_stadiamap(bbox(extent(data)),source="stamen_terrain",force=TRUE)
+          map <- get_map(bbox(extent(data)*1.5),maptype="stamen_terrain",source="stadia",force=TRUE) #default zoom is "auto"
           
           data.df <- data.frame(coordinates(data),as.data.frame(moveStack(data)))
           names(data.df)[1:2] <- c("location.long0","location.lat0")
