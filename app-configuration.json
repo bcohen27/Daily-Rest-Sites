@@ -1,0 +1,9 @@
+{
+    "window": "all",
+    "upX": 0,
+    "downX": 0,
+    "speedvar": "speed",
+    "maxspeed": 1,
+    "duration": 4,
+    "radius": 1000
+}

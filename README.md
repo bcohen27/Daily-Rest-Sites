@@ -16,20 +16,18 @@ Then, the actual analysis is done in three steps. First, all positions with spee
 
 Properties of detected resting sites are provided in a table that is given out as csv artefact. There the following properties are listes for each resting site: animal name, year, night number, timestamp of first resting location, timestamp of last resting location, resting site mean loation (longitute/latitude), number of locations in the resting site, duration the animal has stayed in the resting site, realised radius of the resting site.
 
-For rough evaluation, the App is also producing a pdf map showing the locations of all resting sites on top of the tracks. Note that the visualisation requires you to enter an API key from stadia, as it uses their background maps. This is only a workaround for a few months until MoveApps provides an own OSM mirror. Register for a stadia API here, it is free: https://stadiamaps.com/stamen/onboarding/create-account.
+For rough evaluation, of where the daily rest sites are located, we suggest using the Interactive Map (leaflet) App.
 
 ### Input data
-moveStack in Movebank format
+move2 location object
 
 ### Output data
-moveStack in Movebank format
+move2 location object
 
 ### Artefacts
 `data_rest_selectedTime.csv`: csv-file with Table of all positions that are of low speed (below given threshold) and during night (day) as selected (see Documentation above)
 
 `rest_overview.csv`: csv-file with Table of all rest site properites (see details in Documentatin above)
-
-`rest_sites_onTracks.pdf`: pdf-file of Map showing all tracks (blue) with the locations of the extracted resting sites on top (red). The dots have uniform size, i.e. do not indicate the size of the resting site. That way more sites are visible.
 
 ### Settings
 **Day or night selection (`window`):** Radiobuttons selection to indicate if only night locations ('sundownup'), day locations ('sunupdown') or all locations of a 24h day shall be selected.
@@ -46,7 +44,8 @@ moveStack in Movebank format
 
 **Maximum resting radius (`radius`):** Defined radius the animal has to stay in for a given duration of time for it to be considered resting site. Unit: `metres`.
 
-**Stadia API key (`stamen_key`):** For visualisation of the rest sites on map background you need to enter an API key from stadia here. Note that this is only a workaround for a few months until MoveApps provides an own OSM mirror. Register for a stadia API key here, it is free: https://stadiamaps.com/stamen/onboarding/create-account.
+### Most common errors
+Please make an issue here.
 
 ### Null or error handling:
 **Setting `window`:** The default value (NULL) inicates that all values of a 24h day will be retained and resting sites thereof extracted (starting from midnight).
@@ -63,6 +62,5 @@ moveStack in Movebank format
 
 **Setting `radius`:** If no radius AND no duration are given, the input data set is returned with a warning. If no radius is given (NULL), but a duration is defined then a default radius of 1000m = 1km is set. 
 
-**stamen_key**: Without providing an API key from stadia for using stamen maps, there will be no map pdf artifact.
-
 **Data:** If there are no resting locations retained after all analyses, NULL is returned, likely leading to an error.
+
