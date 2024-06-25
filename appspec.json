@@ -1,4 +1,5 @@
 {
+  "version": "1.2",
   "settings": [
     {
       "id": "window",
@@ -62,25 +63,18 @@
       "description": "Insert maximum radius (in m) within which your animal(s) must remain to be considered resting. Locations can be affected by location inaccuracy (e.g. GPS error) or by movements of the animal itself. If a resting duration is given (see above), a default of 1,000 m (1 km) is used here.",
       "defaultValue": 1000,
       "type": "DOUBLE"
-    },
-	{
-      "id": "stamen_key",
-      "name": "Stadia API key",
-      "description": "For visualisation of the rest sites on map background you need to enter an API key from stadia here. Note that this is only a workaround for a few months until MoveApps provides an own OSM mirror. Register for a stadia API key here, it is free: https://stadiamaps.com/stamen/onboarding/create-account.",
-      "defaultValue": null,
-      "type": "STRING"
     }
   ],
   "dependencies": {
     "R": [
       {
-        "name": "move"
+        "name": "move2"
       },
       {
         "name": "foreach"
       },
       {
-        "name": "maptools"
+        "name": "sf"
       },
       {
         "name": "lubridate"
@@ -89,11 +83,10 @@
         "name": "geosphere"
       },
 	  {
-        "name": "ggmap"
+        "name": "suncalc"
       }
     ]
   },
-  "createsArtifacts": true,
   "license": {
     "key": "MIT"
   },
@@ -101,6 +94,7 @@
   "keywords": [
     "rest site",
 	"resting",
+	"roost",
     "sleep",
 	"forage"
     "filter",
@@ -118,7 +112,4 @@
       "affiliationRor": "https://ror.org/026stee22"
     }
   ],
-  "documentation" : {
-    "url": "https://github.com/movestore/Daily-Rest-Sites/blob/master/README.md"
-  }
 }
