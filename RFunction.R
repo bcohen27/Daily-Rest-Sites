@@ -81,8 +81,8 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
         }
       } else if (speedvar %in% names(datai)) 
       {
-        if (any(is.na(dataispeedvar))) logger.info("Your speed variable contains NA, these are kept in the data set of rest positions.")
         eval(parse(text=paste0("dataispeedvar <- datai$",speedvar)))
+        if (any(is.na(dataispeedvar))) logger.info("Your speed variable contains NA, these are kept in the data set of rest positions.")
         res <- datai[sort(which(dataispeedvar < maxspeed | is.na(dataispeedvar))),] # this allows also NA speed to be selected
       } else 
       {
