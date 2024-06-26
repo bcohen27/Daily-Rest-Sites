@@ -2,7 +2,7 @@
     "window": "all",
     "upX": 0,
     "downX": 0,
-    "speedvar": "speed",
+    "speedvar": "ground_speed",
     "maxspeed": 1,
     "duration": 4,
     "radius": 1000
