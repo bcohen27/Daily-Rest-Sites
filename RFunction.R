@@ -432,7 +432,7 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
     }
   }
   
-  if(!is.null(result))
+  if(!is.null(result) & (!st_is_longlat(data)))
   {
     result <- result |> 
       sf::st_transform(data_proj)
