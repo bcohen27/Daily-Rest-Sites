@@ -4,6 +4,7 @@ library('foreach')
 library('sf') # maptools deprecated
 library('geosphere')
 library('suncalc')
+library("dplyr")
 
 # for now have removed pdf map, could add it again with use of MoveApps OSM mirror
 
@@ -384,7 +385,8 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
                   if (durx>=duration & radx<=radius) #added this condition to only save rest sites of given duration (if this condition is left out also rest site with shorter duration are given back)
                   {
                     #data.resti.df <- rbind(data.resti.df,data.selx.df)
-                    ix_sel_id <- c(ix_sel_id,which(mt_time(data.selx) %in% mt_time(data.nighti)))
+                    ix_sel_id <- c(ix_sel_id,which(mt_time(data.nighti) %in% mt_time(data.selx)))
+                    
                     
                     if (window=="all")
                     {
@@ -438,6 +440,8 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
       sf::st_transform(data_proj)
     logger.info(paste("Retransformed result to input projection:", data_proj))
   }
+  
+  result <- dplyr::arrange(result, mt_track_id(result), mt_time(result)) ## sorting timestamps
   
   return(result)
 }
