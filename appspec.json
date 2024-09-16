@@ -84,6 +84,9 @@
       },
 	  {
         "name": "suncalc"
+      },
+	  {
+        "name": "dplyr"
       }
     ]
   },
