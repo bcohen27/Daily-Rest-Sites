@@ -280,6 +280,12 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
     } else 
     {
       data.night.df <- as.data.frame(data.night)
+      data.night.df <- data.night.df[,-which(names(data.night.df)=="geometry")] #remove geometry, as it shifts the columns
+      data.night.df$location.long <- st_coordinates(data.night)[,1] #instead add long and lat as two location columns
+      data.night.df$location.lat <- st_coordinates(data.night)[,2]
+      ix.front <- which(names(data.night.df) %in% c("event_id",mt_track_id_column(data.night),"species","timestamp","location.long","location.lat")) #reorder to have "important" info in the front
+      data.night.df <- data.frame(data.night.df[,ix.front],data.night.df[,-ix.front])
+      
       nacolx <- which(apply(data.night.df,2,function (x) all(is.na(x)))) #remove empty columns
       if (length(nacolx)>0) data.night.df.nna <- data.night.df[,-nacolx] else data.night.df.nna <- data.night.df #remove columns with all NA
       
