@@ -8,3 +8,4 @@ data/output/**
 tests/testthat/plot.png
 akoelzsch.env
 files_move1
+.vs/
