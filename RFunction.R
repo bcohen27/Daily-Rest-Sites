@@ -9,7 +9,7 @@ library("dplyr")
 # for now have removed pdf map, could add it again with use of MoveApps OSM mirror
 
 # Read in the CSV file
-#data <- read.csv("C:/Users/bcohen/Documents/repos/Daily-Rest-Sites/data/raw/Staten Island-CA marked birds USGS-TNC.csv")
+data <- read.csv("C:/Users/bcohen/Documents/repos/Daily-Rest-Sites/data/raw/Staten Island-CA marked birds USGS-TNC.csv")
 
 
 # Function to generate a random 5-character string
@@ -397,14 +397,14 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
                   timeE <- max(mt_time(data.selx))
                   durx <- as.numeric(difftime(timeE,time0,unit="hour"))
                   radx <- max(distVincentyEllipsoid(mid,st_coordinates(data.selx)))
-<<<<<<< HEAD
+
 
                   # Add unique ID to each rest site
                   unique_id <- generate_random_id()
                   # Add the unique ID to the data.selx data frame
                   data.selx$unique_id <- unique_id
-=======
->>>>>>> 5f060cf30365e114c1424b9e9a4f5149f40528d4
+
+
                   
                   if (durx>=duration & radx<=radius) #added this condition to only save rest sites of given duration (if this condition is left out also rest site with shorter duration are given back)
                   {
@@ -414,19 +414,11 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
                     
                     if (window=="all")
                     {
-<<<<<<< HEAD
                       prop.rest.df <- rbind(prop.rest.df,data.frame("unique_id" = unique_id,"local.identifier"=unique(mt_track_id(data.selx)),"species"=data.selx.df$species[1],"year"=data.selx.df$year[1],"yday"=data.selx.df$yday[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=nrow(data.selx),"rest.duration"=durx,"rest.radius"=radx))
                     } else
                     {
                       if (window=="sundownup") prop.rest.df <- rbind(prop.rest.df,data.frame("unique_id" = unique_id,"local.identifier"=unique(mt_track_id(data.selx)),"species"=data.selx.df$species[1],"year"=data.selx.df$year[1],"ynight"=data.selx.df$ynight[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=nrow(data.selx),"rest.duration"=durx,"rest.radius"=radx))
                       if (window=="sunupdown") prop.rest.df <- rbind(prop.rest.df,data.frame("unique_id" = unique_id,"local.identifier"=unique(mt_track_id(data.selx)),"species"=data.selx.df$species[1],"year"=data.selx.df$year[1],"yday"=data.selx.df$yday[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=nrow(data.selx),"rest.duration"=durx,"rest.radius"=radx))
-=======
-                      prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=unique(mt_track_id(data.selx)),"species"=data.selx.df$species[1],"year"=data.selx.df$year[1],"yday"=data.selx.df$yday[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=nrow(data.selx),"rest.duration"=durx,"rest.radius"=radx))
-                    } else
-                    {
-                      if (window=="sundownup") prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=unique(mt_track_id(data.selx)),"species"=data.selx.df$species[1],"year"=data.selx.df$year[1],"ynight"=data.selx.df$ynight[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=nrow(data.selx),"rest.duration"=durx,"rest.radius"=radx))
-                      if (window=="sunupdown") prop.rest.df <- rbind(prop.rest.df,data.frame("local.identifier"=unique(mt_track_id(data.selx)),"species"=data.selx.df$species[1],"year"=data.selx.df$year[1],"yday"=data.selx.df$yday[1],"timestamp.first"=as.character(time0),"timestamp.last"=as.character(timeE),"rest.mean.long"=mid[1,1],"rest.mean.lat"=mid[1,2],"rest.nposi"=nrow(data.selx),"rest.duration"=durx,"rest.radius"=radx))
->>>>>>> 5f060cf30365e114c1424b9e9a4f5149f40528d4
                     }
                   }
                   
@@ -461,16 +453,12 @@ rFunction <- function(data, window="all", upX=0, downX=0, speedvar="speed", maxs
         result <- data.rest
         write.csv(prop.rest.df,file = appArtifactPath("rest_overview.csv"),row.names=FALSE) #csv artefakt
 
-<<<<<<< HEAD
         current_date <- format(Sys.Date(), "%Y-%m-%d")
         # Save the rest sites as a shapefile
         st_write(st_as_sf(prop.rest.df, coords = c("rest.mean.long", "rest.mean.lat"), crs = 4326), paste0("rest_sites_", current_date, ".shp"))
 
         # Save the data used to create the rest sites as a shapefile with the current date
         st_write(data.selx,paste0("data_used_for_rest_sites_", current_date, ".shp"))
-
-=======
->>>>>>> 5f060cf30365e114c1424b9e9a4f5149f40528d4
         #stamen map does not work... better to use leaflet App after this one
       }
     }
